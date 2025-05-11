@@ -1,0 +1,122 @@
+---
+title: "Taxa de Juros Real - Análise de Dados Econômicos"
+author: "Rafaela"
+format: html
+editor: visual
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+# Instalar e carregar pacotes necessários
+if (!require("WDI")) install.packages("WDI")
+if (!require("tidyverse")) install.packages("tidyverse")
+
+library(WDI)
+library(tidyverse)
+
+options(scipen = 999)  # Evita notação científica
+```
+
+## Sobre a Variável
+
+A variável escolhida foi a **Taxa de Juros Real** (`FR.INR.RINR`), fornecida pelo **Banco Mundial**.\
+Ela mostra os juros reais após descontar a inflação, refletindo o custo efetivo de financiamento ou o retorno real sobre investimentos.
+
+------------------------------------------------------------------------
+
+## Gráfico de Dados em Painel - Taxa de Juros Real
+
+```{r}
+#| label: grafico-painel-juros
+#| warning: false
+#| echo: false
+
+# Baixar dados
+dadospainel <- WDI(country = "all", indicator = "FR.INR.RINR")
+
+# Filtrar países de interesse para destaque
+paises_destaque <- c("Brazil", "United States", "China", "India", "Argentina","Mexico", "South Africa")
+
+# Gráfico com destaque para países selecionados
+ggplot(data = dadospainel, aes(x = year, y = FR.INR.RINR)) +
+  geom_point(alpha = 0.15, color = "gray70") +
+  geom_line(data = filter(dadospainel, country %in% paises_destaque),
+            aes(color = country), size = 1) +
+  labs(
+    title = "Taxa de Juros Real ao Longo do Tempo - Países Selecionados",
+    x = "Ano",
+    y = "Taxa de Juros Real (%)",
+    color = "País"
+  ) +
+  theme_minimal(base_family = "Helvetica") +
+  theme(
+    plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+    axis.title = element_text(size = 12),
+    axis.text = element_text(size = 10)
+  )
+```
+
+------------------------------------------------------------------------
+
+## Gráfico de Corte Transversal - Taxa de Juros Real em 2020
+
+```{r}
+#| label: grafico-corte-juros
+#| warning: false
+#| echo: false
+
+# Dados de 2020
+dadoscorte <- WDI(country = "all", indicator = "FR.INR.RINR", start = 2020, end = 2020)
+
+# Selecionar países com maior relevância (exemplo: G20)
+paises_importantes <- c("Brazil", "United States", "China", "India", "Argentina", "Mexico", "South Africa")
+
+dadosfiltro <- dadoscorte %>% 
+  filter(country %in% paises_importantes)
+
+# Gráfico de barras horizontais
+ggplot(data = dadosfiltro, aes(x = reorder(country, FR.INR.RINR), y = FR.INR.RINR)) +
+  geom_col(fill = "steelblue") +
+  coord_flip() +
+  labs(
+    title = "Taxa de Juros Real em 2020 - Países Selecionados",
+    x = "País",
+    y = "Taxa de Juros Real (%)"
+  ) +
+  theme_minimal(base_family = "Helvetica") +
+  theme(
+    plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+    axis.text.y = element_text(size = 10)
+  )
+```
+
+------------------------------------------------------------------------
+
+## Gráfico de Série Temporal - Taxa de Juros Real no Brasil
+
+```{r}
+#| label: grafico-temporal-brasil
+#| warning: false
+#| echo: false
+
+# Dados do Brasil
+dadosbrasil <- WDI(country = "BR", indicator = "FR.INR.RINR")
+
+# Gráfico com pontos e linhas para facilitar leitura ano a ano
+ggplot(data = dadosbrasil, aes(x = year, y = FR.INR.RINR)) +
+  geom_line(color = "darkred", size = 1) +
+  geom_point(color = "darkred", size = 2) +
+  scale_x_continuous(breaks = seq(min(dadosbrasil$year), max(dadosbrasil$year), by = 2)) +
+  labs(
+    title = "Evolução da Taxa de Juros Real no Brasil",
+    x = "Ano",
+    y = "Taxa de Juros Real (%)"
+  ) +
+  theme_minimal(base_family = "Helvetica") +
+  theme(
+    plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+```
