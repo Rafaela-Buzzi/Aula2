@@ -1,0 +1,138 @@
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+---
+title: "Taxa de Juros Real - Análise de Dados Econômicos"
+author: "Rafaela"
+format: html
+editor: visual
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+# Instalar e carregar pacotes necessários
+if (!require("WDI")) install.packages("WDI")
+if (!require("tidyverse")) install.packages("tidyverse")
+
+library(WDI)
+library(tidyverse)
+
+options(scipen = 999)  # Evita notação científica
+```
+
+## Sobre a Variável
+
+A variável escolhida neste trabalho é a **Taxa de Juros Real**. Essa variável representa o retorno efetivo de um investimento ou o custo real de um empréstimo.
+
+TAXA DE JUROS REAL = TAXA DE JUROS NOMINAL - INFLAÇÃO
+
+Os dados são expressos em **percentual ao ano (% a.a.)**. A fonte utilizada para os dados foi o **Banco Mundial (World Bank)**, por meio da base de dados **World Development Indicators (WDI)**.
+
+------------------------------------------------------------------------
+
+## Gráfico de Dados em Painel - Taxa de Juros Real
+
+\
+Mostra a evolução da Taxa de Juros Real ao longo do tempo em países como **Brasil, EUA, China, entre outros**. Os dados revelam que os países desenvolvidos tendem a manter taxas mais baixas e estáveis, enquanto países emergentes como o Brasil apresentam maior volatilidade, refletindo instabilidade econômica e pressões inflacionárias.
+
+```{r}
+#| label: grafico-painel-juros
+#| warning: false
+#| echo: false
+
+# Baixar dados
+dadospainel <- WDI(country = "all", indicator = "FR.INR.RINR")
+
+# Filtrar países de interesse para destaque
+paises_destaque <- c("Brazil", "United States", "China", "India", "Argentina","Mexico", "South Africa")
+
+# Gráfico com destaque para países selecionados
+ggplot(data = dadospainel, aes(x = year, y = FR.INR.RINR)) +
+  geom_point(alpha = 0.15, color = "gray70") +
+  geom_line(data = filter(dadospainel, country %in% paises_destaque),
+            aes(color = country), size = 1) +
+  labs(
+    title = "Taxa de Juros Real ao Longo do Tempo - Países Selecionados",
+    x = "Ano",
+    y = "Taxa de Juros Real (%)",
+    color = "País"
+  ) +
+  theme_minimal(base_family = "Helvetica") +
+  theme(
+    plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+    axis.title = element_text(size = 12),
+    axis.text = element_text(size = 10)
+  )
+```
+
+------------------------------------------------------------------------
+
+## Gráfico de Corte Transversal - Taxa de Juros Real em 2020
+
+Compara a Taxa de Juros Real entre os países selecionados no ano de **2020**. Os dados mostram que o **Brasil** possui uma das maiores taxas reais, indicando uma política monetária mais restritiva. Em contraste, países como **EUA** apresenta taxas mais baixas ou próximas de zero.
+
+**Observação sobre a Argentina:** Mesmo com juros nominais elevados, a Argentina apresenta **juros reais negativos** porque a **inflação é muito alta** e ultrapassa a taxa nominal, evidenciando uma economia instável.
+
+```{r}
+#| label: grafico-corte-juros
+#| warning: false
+#| echo: false
+
+# Dados de 2020
+dadoscorte <- WDI(country = "all", indicator = "FR.INR.RINR", start = 2020, end = 2020)
+
+# Selecionar países com maior relevância (exemplo: G20)
+paises_importantes <- c("Brazil", "United States", "China", "India", "Argentina", "Mexico", "South Africa")
+
+dadosfiltro <- dadoscorte %>% 
+  filter(country %in% paises_importantes)
+
+# Gráfico de barras horizontais
+ggplot(data = dadosfiltro, aes(x = reorder(country, FR.INR.RINR), y = FR.INR.RINR)) +
+  geom_col(fill = "steelblue") +
+  coord_flip() +
+  labs(
+    title = "Taxa de Juros Real em 2020 - Países Selecionados",
+    x = "País",
+    y = "Taxa de Juros Real (%)"
+  ) +
+  theme_minimal(base_family = "Helvetica") +
+  theme(
+    plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+    axis.text.y = element_text(size = 10)
+  )
+```
+
+------------------------------------------------------------------------
+
+## Gráfico de Série Temporal - Taxa de Juros Real no Brasil
+
+Mostra a evolução da Taxa de Juros Real no Brasil ao longo dos anos. Os dados indicam momentos de elevação da taxa, ligados a tentativas de conter a inflação, e períodos de redução para estimular a economia.
+
+```{r}
+#| label: grafico-temporal-brasil
+#| warning: false
+#| echo: false
+
+# Dados do Brasil
+dadosbrasil <- WDI(country = "BR", indicator = "FR.INR.RINR")
+
+# Gráfico com pontos e linhas para facilitar leitura ano a ano
+ggplot(data = dadosbrasil, aes(x = year, y = FR.INR.RINR)) +
+  geom_line(color = "darkred", size = 1) +
+  geom_point(color = "darkred", size = 2) +
+  scale_x_continuous(breaks = seq(min(dadosbrasil$year), max(dadosbrasil$year), by = 2)) +
+  labs(
+    title = "Evolução da Taxa de Juros Real no Brasil",
+    x = "Ano",
+    y = "Taxa de Juros Real (%)"
+  ) +
+  theme_minimal(base_family = "Helvetica") +
+  theme(
+    plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+```
