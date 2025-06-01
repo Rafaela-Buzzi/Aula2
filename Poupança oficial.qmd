@@ -1,0 +1,60 @@
+---
+
+---
+
+---
+title: "Rentabilidade da Poupança no Brasil"
+format: revealjs
+editor: visual
+execute:
+  freeze: auto
+---
+
+Autora: Rafaela Buzzi
+
+# INTRODUÇÃO
+
+Nesta apresentação, vamos analisar a **rentabilidade dos depósitos de poupança no Brasil**, a partir de 04/05/2012.
+
+# SOBRE A VARIÁVEL
+
+A rentabilidade da poupança indica: **quanto rende o dinheiro aplicado nessa modalidade ao longo do tempo**.
+
+### Por que é importante?
+
+-   Pois a poupança ainda é o **investimento mais popular do país**, principalmente entre os pequenos poupadores.
+
+### Por que com alternativas mais rentáveis a poupança continua sendo amplamente utilizada?
+
+-   **Liquidez diária**, **isenção de imposto de renda**, **segurança (FGC)** e **facilidade de acesso**.
+
+------------------------------------------------------------------------
+
+# ATENÇÃO!
+
+-   A poupança é um dos investimentos mais populares entre os brasileiros, mas geralmente apresenta **baixa rentabilidade real**, principalmente em períodos de inflação elevada.
+
+------------------------------------------------------------------------
+
+## Gráfico animado da rentabilidade da poupança
+
+![](poupanca_animada.gif)
+
+#### 🗓️ **Maio de 2012**:
+
+Foi implementada a **nova regra de rendimento da poupança**:
+
+Quando a taxa Selic é **acima de 8,5% ao ano**, a poupança rende **0,5% ao mês + TR**.
+
+Quando a Selic está **igual ou abaixo de 8,5%**, o rendimento é **70% da Selic + TR**.
+
+Essa mudança visou tornar a Poupança menos atrativa quando os juros estão baixos, estimulando investimentos mais produtivos.
+
+#### 📉 **2017 a 2020**:
+
+Período de **forte queda na Selic**, chegando a **mínima histórica de 2% ao ano em 2020**, durante a pandemia da COVID-19.\
+
+📈 **2021 em diante**:
+
+Aumento da inflação -\> Banco Central iniciou um **ciclo de alta da Selic** -\> elevou a rentabilidade da poupança novamente.\
+➡️ Mesmo assim, **ainda perde para outras aplicações de renda fixa**, como CDBs e Tesouro Direto, em muitos momentos.
